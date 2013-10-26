@@ -19,7 +19,7 @@ case class User(email: String, name: String, password: String)
 
     def findById(id: Long): Option[User] = {
       DB.withConnection { implicit c =>
-        SQL("select * from user where user_id = {id}").on(
+        SQL("select * from users where user_id = {id}").on(
             'id -> id
             ).as(User.simple.singleOpt)
       }
@@ -27,7 +27,7 @@ case class User(email: String, name: String, password: String)
 
     def findByEmail(email: String): Option[User] = {
       DB.withConnection { implicit c =>
-        SQL("select * from user where email = {email}").on(
+        SQL("select * from users where email = {email}").on(
             'email -> email
             ).as(User.simple.singleOpt)
       }
@@ -35,7 +35,7 @@ case class User(email: String, name: String, password: String)
 
     def findAll: Seq[User] = {
       DB.withConnection { implicit c =>
-        SQL("select * from user").as(User.simple *)
+        SQL("select * from users").as(User.simple *)
       }
     }
 
@@ -43,7 +43,7 @@ case class User(email: String, name: String, password: String)
       DB.withConnection { implicit c =>
         SQL(
             """
-            select * from user where
+            select * from users where
             email = {email} and password = {password}
             """
            ).on(
@@ -57,7 +57,7 @@ case class User(email: String, name: String, password: String)
       DB.withConnection { implicit c =>
         SQL(
             """
-            insert into user (
+            insert into users (
               email, name, password
               )
             values (
