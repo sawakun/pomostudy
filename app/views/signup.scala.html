@@ -1,0 +1,49 @@
+@(form: Form[(String, String, (String, String))])
+
+	@import views.BootstrapHelper._
+
+	@main("Sign up") {
+		<legend>Sign up</legend>
+			@helper.form(
+					routes.Application.register,
+					'class -> "form-horizontal"
+				    ) {
+				<fieldset>
+					@if(form.hasErrors) {
+						<div class="alert alert-block alert-error">
+							There are problems.
+							</div>
+					}
+
+				@helper.inputText(
+						form("email"),
+						'type -> "email",
+						'placeholder -> "john@example.com",
+						'_label -> "Email Address",
+						'_help -> "This is used for your login.",
+						'_error -> form.error("email")
+						)
+					@helper.inputText(
+							form("name"),
+							'placeholder -> "John Smith",
+							'_label -> "Your name"
+							)
+					@helper.inputPassword(
+							form("password.main"),
+							'placeholder -> "secret",
+							'_label -> "Passowrd",
+							'_error -> form.error("password")
+							)
+					@helper.inputPassword(
+							form("password.confirm"),
+							'placeholder -> "secret",
+							'_label -> "Confirm password",
+							'_help -> "Input password again."
+							)
+					<div class="control-group">
+					<div class="controls">
+					<button type="submit" id="signupbutton" class="btn">Create an account</button>
+					</div>
+					</div>
+					</fieldset>
+			}
