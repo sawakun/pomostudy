@@ -13,5 +13,5 @@ trait Secured {
     def IsAuthenticated(f: => String => Request[AnyContent] => Result) = Security.Authenticated(email, onUnauthorized) { user =>
       Action(request => f(user)(request))
     }
-
+}
 

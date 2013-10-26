@@ -57,13 +57,8 @@ object Application extends Controller with Secured {
           "main" -> nonEmptyText,
           "confirm" -> nonEmptyText
           ).verifying(
-            "Password is
-            not match.",
-            password
-            =>
-            password._1
-            ==
-            password._2
+            "Password is not match.",
+            password => password._1 == password._2
             )
         )
       )
