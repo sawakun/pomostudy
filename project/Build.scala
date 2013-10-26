@@ -11,7 +11,6 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     anorm,
-    cache,
     "postgresql" % "postgresql" % "8.4-702.jdbc4"
   )
 
