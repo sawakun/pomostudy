@@ -6,13 +6,15 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class User(email: String, name: String, password: String)
+import models.helpers._
 
+case class User(email: String, name: String, password: String)
+  
   object User {
     val simple = {
-      get[String]("user.email") ~
-        get[String]("user.name") ~
-        get[String]("user.password") map {
+      get[String]("users.email") ~
+        get[String]("users.name") ~
+        get[String]("users.password") map {
           case email ~ name ~ password => User(email, name, password)
         }
     }
@@ -40,6 +42,7 @@ case class User(email: String, name: String, password: String)
     }
 
     def authenticate(email: String, password: String): Option[User] = { 
+      implicit def String2ShaDigest(s: String): ShaDigest = new ShaDigest(s)
       DB.withConnection { implicit c =>
         SQL(
             """
@@ -48,12 +51,13 @@ case class User(email: String, name: String, password: String)
             """
            ).on(
              'email -> email,
-             'password -> password
+             'password -> password.digestString
              ).as(User.simple.singleOpt)
       }
     }
 
     def create(user: User): User = {
+      implicit def String2ShaDigest(s: String): ShaDigest = new ShaDigest(s)
       DB.withConnection { implicit c =>
         SQL(
             """
@@ -67,7 +71,7 @@ case class User(email: String, name: String, password: String)
            ).on(
              'email -> user.email,
              'name -> user.name,
-             'password -> user.password
+             'password -> user.password.digestString
              ).executeUpdate()
 
            user
